@@ -502,6 +502,29 @@
   .success-msg h3 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--dourado); margin-bottom: 10px; }
   .success-msg p { font-size: 15px; color: rgba(245,237,214,.65); line-height: 1.7; }
 
+  .form-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 22px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(245,237,214,.65);
+}
+
+.form-terms input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--dourado);
+  flex-shrink: 0;
+}
+
+.form-terms a {
+  color: var(--dourado);
+  text-decoration: underline;
+}
+
   /* ════════════════════ FOOTER ════════════════════ */
   footer {
     background: #0a0a0a; border-top: 1px solid rgba(218,165,32,.12);
@@ -538,6 +561,13 @@
   border-radius: 3px;
   box-shadow: 0 0 8px rgba(0,0,0,.25);
   flex-shrink: 0;
+  }
+
+  .success-flag {
+  width: 74px;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(218,165,32,.18);
   }
 </style>
 </head>
@@ -955,16 +985,16 @@
       <div id="form-container">
         <div class="form-group">
           <label>Nome completo</label>
-          <input type="text" id="nome" placeholder="Seu nome" />
+          <input type="text" id="nome" placeholder="Seu nome" required />
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>WhatsApp / Telefone</label>
-            <input type="tel" id="telefone" placeholder="(11) 99999-9999" />
+            <input type="tel" id="telefone" placeholder="(11) 99999-9999" required />
           </div>
           <div class="form-group">
             <label>E-mail</label>
-            <input type="email" id="email" placeholder="seu@email.com" />
+            <input type="email" id="email" placeholder="seu@email.com" required />
           </div>
         </div>
         <div class="form-row">
@@ -977,6 +1007,7 @@
             placeholder="Ex: 4"
             min="1"
             inputmode="numeric"
+            required
           />
           </div>
           <div class="form-group">
@@ -994,12 +1025,23 @@
           <label>Observações (opcional)</label>
           <textarea id="obs" placeholder="Tem alguma necessidade especial ou comentário?"></textarea>
         </div>
+        <div class="form-terms">
+        <input type="checkbox" id="aceitePolitica" required>
+        <label for="aceitePolitica">
+          Eu aceito os termos da
+          <a href="politica-de-privacidade.html" target="_blank">
+            Política de Privacidade
+          </a>.
+        </label>
+      </div>
         <button class="submit-btn" onclick="handleSubmit()">Quero Garantir Minha Reserva</button>
         <p class="form-note">Após o envio, nossa equipe entrará em contato em até 24h para confirmar sua reserva. Vagas limitadas.</p>
       </div>
 
       <div class="success-msg" id="success-msg">
-        <div class="big-check">🇧🇷</div>
+        <div class="big-check">
+          <img src="https://flagcdn.com/br.svg" alt="Bandeira do Brasil" class="success-flag">
+        </div>
         <h3>Reserva solicitada!</h3>
         <p>Recebemos seu cadastro! Nossa equipe entrará em contato em breve via WhatsApp ou telefone para confirmar sua reserva.<br><br><strong>#VemParaAEstação!</strong></p>
       </div>
@@ -1056,6 +1098,7 @@ async function handleSubmit() {
   const pessoas = document.getElementById('pessoas').value.trim();
   const origem = document.getElementById('origem').value;
   const obs = document.getElementById('obs').value.trim();
+  const aceitePolitica = document.getElementById('aceitePolitica').checked;
 
   if (!nome) {
     alert('Por favor, preencha seu nome.');
@@ -1067,10 +1110,20 @@ async function handleSubmit() {
     return;
   }
 
+  if (!email) {
+  alert('Por favor, informe seu e-mail.');
+  return;
+  }
+
   if (!pessoas || pessoas <= 0) {
     alert('Informe a quantidade de pessoas.');
     return;
   }
+
+  if (!aceitePolitica) {
+  alert('Você precisa aceitar a Política de Privacidade para continuar.');
+  return;
+}
 
   const dados = {
     jogo: jogo,
@@ -1081,7 +1134,8 @@ async function handleSubmit() {
     email: email,
     pessoas: pessoas,
     origem: origem,
-    obs: obs
+    obs: obs,
+    aceitePolitica: aceitePolitica ? "Sim" : "Não"
   };
 
   fetch('https://script.google.com/macros/s/AKfycby35MGU26Ni-gaP1U0aOR8Xa3jjDbg1J24_DIqYIYDtsBoxn10WAV4tBCdMmOBbSU0pAw/exec', {
