@@ -2,6 +2,11 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby35MGU26Ni-gaP1U0aO
 
 let allLeads = [];
 let selectedGameKey = "";
+let lastKnownLeadCount = 0;
+let latestNewLead = null;
+let autoRefreshInterval = null;
+let toastTimeout = null;
+let isFirstLoad = true;
 
 function jsonp(url) {
   return new Promise((resolve, reject) => {
@@ -20,16 +25,100 @@ function jsonp(url) {
   });
 }
 
-async function loadLeads() {
+async function loadLeads(options = {}) {
+  const silent = options.silent || false;
+
   const url = `${SCRIPT_URL}?action=list`;
   const response = await jsonp(url);
 
-  allLeads = response.leads || [];
+  const newLeads = response.leads || [];
+  const previousCount = allLeads.length;
+
+  allLeads = newLeads;
 
   document.getElementById("loading").style.display = "none";
 
   renderStats();
   renderGames();
+
+  if (selectedGameKey) {
+    const selectedGameStillExists = allLeads.some(lead => getGameKey(lead) === selectedGameKey);
+
+    if (selectedGameStillExists) {
+      populateResponsavelFilter(getSelectedGameLeads());
+      applyFilters();
+
+      if (document.getElementById("pipelineArea").style.display === "block") {
+        renderPipeline(getFilteredLeads());
+      }
+    }
+  }
+
+  if (!isFirstLoad && !silent && newLeads.length > previousCount) {
+    const newestLead = sortNewestLeadsFirst(newLeads)[0];
+
+    latestNewLead = newestLead;
+    showLeadToast(newestLead);
+  }
+
+  lastKnownLeadCount = newLeads.length;
+  isFirstLoad = false;
+}
+
+function startAutoRefreshLeads() {
+  if (autoRefreshInterval) {
+    clearInterval(autoRefreshInterval);
+  }
+
+  autoRefreshInterval = setInterval(() => {
+    loadLeads({ silent: false });
+  }, 20000); // 20 segundos
+}
+
+function showLeadToast(lead) {
+  const toast = document.getElementById("leadToast");
+
+  document.getElementById("leadToastName").innerText =
+    lead["Nome"] || "Novo lead";
+
+  document.getElementById("leadToastInfo").innerText =
+    `${lead["Jogo"] || "Jogo"} • ${lead["Pessoas"] || "-"} pessoa(s)`;
+
+  toast.classList.add("active");
+
+  if (toastTimeout) {
+    clearTimeout(toastTimeout);
+  }
+
+  toastTimeout = setTimeout(() => {
+    hideLeadToast();
+  }, 8000);
+}
+
+function hideLeadToast() {
+  const toast = document.getElementById("leadToast");
+  toast.classList.remove("active");
+}
+
+function goToNewestLead() {
+  if (!latestNewLead) return;
+
+  selectedGameKey = getGameKey(latestNewLead);
+
+  openGame(selectedGameKey);
+
+  setTimeout(() => {
+    const tableArea = document.getElementById("tableArea");
+
+    if (tableArea) {
+      tableArea.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  }, 200);
+
+  hideLeadToast();
 }
 
 function renderStats() {
@@ -174,6 +263,29 @@ function renderGames() {
     `;
 
     grid.appendChild(card);
+  });
+}
+
+function parseLeadDate(value) {
+  if (!value) return 0;
+
+  const text = String(value).trim();
+
+  // Formato: 26/05/2026 14:10
+  const match = text.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})$/);
+
+  if (match) {
+    const [, day, month, year, hour, minute] = match;
+    return new Date(year, month - 1, day, hour, minute).getTime();
+  }
+
+  const date = new Date(text);
+  return isNaN(date.getTime()) ? 0 : date.getTime();
+}
+
+function sortNewestLeadsFirst(leads) {
+  return [...leads].sort((a, b) => {
+    return parseLeadDate(b["Data do envio"]) - parseLeadDate(a["Data do envio"]);
   });
 }
 
@@ -330,6 +442,7 @@ function clearFilters(shouldRender = true) {
 }
 
 function renderTable(leads) {
+  leads = sortNewestLeadsFirst(leads);  
   const tbody = document.getElementById("leadsTable");
   tbody.innerHTML = "";
 
@@ -439,6 +552,7 @@ function showPipelineView() {
 }
 
 function renderPipeline(leads) {
+  leads = sortNewestLeadsFirst(leads);  
   const area = document.getElementById("pipelineArea");
   area.innerHTML = "";
 
@@ -737,12 +851,12 @@ function checkPassword() {
   const password = document.getElementById("adminPassword").value;
 
   if (password === ADMIN_PASSWORD) {
-    localStorage.setItem("adminAccess", "true");
-    document.getElementById("loginOverlay").style.display = "none";
-    loadLeads();
-  } else {
-    document.getElementById("loginError").style.display = "block";
-  }
+  localStorage.setItem("adminAccess", "true");
+  document.getElementById("loginOverlay").style.display = "none";
+
+  loadLeads();
+  startAutoRefreshLeads();
+}
 }
 
 document.getElementById("adminPassword").addEventListener("keydown", function(event) {
@@ -753,7 +867,9 @@ document.getElementById("adminPassword").addEventListener("keydown", function(ev
 
 if (localStorage.getItem("adminAccess") === "true") {
   document.getElementById("loginOverlay").style.display = "none";
+
   loadLeads();
+  startAutoRefreshLeads();
 }
 
 function exportLeadsCSV() {
@@ -842,3 +958,4 @@ function exportLeadsCSV() {
 
   URL.revokeObjectURL(url);
 }
+
