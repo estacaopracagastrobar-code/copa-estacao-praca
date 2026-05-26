@@ -213,7 +213,9 @@ function renderGames() {
       first,
       respondidos: leads.filter(l => l["Respondido"] === "Sim").length,
       reservas: leads.filter(l => l["Reserva Confirmada"] === "Sim").length,
-      pagos: leads.filter(l => l["Pagamento"] === "Pago").length
+      pagos: leads.filter(l => l["Pagamento"] === "Pago").length,
+      pessoasConfirmadas: getConfirmedPeopleCount(leads),
+      capacidade: 200
     };
   });
 
@@ -251,8 +253,17 @@ function renderGames() {
     card.onclick = () => openGame(game.key);
 
     card.innerHTML = `
+     <div class="game-card-top">
+    <div>
       <h3>${game.first["Jogo"]}</h3>
       <p>${getGameDate(game.first)} às ${getGameTime(game.first)}</p>
+    </div>
+
+  <div class="capacity-badge">
+    <strong>${game.pessoasConfirmadas}/${game.capacidade}</strong>
+    <span>lugares</span>
+  </div>
+</div>
 
       <div class="game-metrics">
         <div class="metric"><span>Leads</span><strong>${game.leads.length}</strong></div>
@@ -959,3 +970,10 @@ function exportLeadsCSV() {
   URL.revokeObjectURL(url);
 }
 
+function getConfirmedPeopleCount(leads) {
+  return leads
+    .filter(lead => lead["Reserva Confirmada"] === "Sim")
+    .reduce((total, lead) => {
+      return total + Number(lead["Pessoas"] || 0);
+    }, 0);
+}
