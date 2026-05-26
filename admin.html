@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Leads | Estação Praça</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --verde: #1F564C;
+  --preto: #161617;
+  --dourado: #DAA520;
+  --creme: #F5EDD6;
+  --verde-claro: #2a7a6c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--preto);
+  color: var(--creme);
+  font-family: 'Barlow', sans-serif;
+}
+
+.header {
+  padding: 36px 20px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(218,165,32,.12) 0%, transparent 60%),
+    linear-gradient(160deg, #0d0d0e 0%, #1a2a28 50%, #0d0d0e 100%);
+  border-bottom: 1px solid rgba(218,165,32,.14);
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.logo-area img {
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 1px solid rgba(218,165,32,.45);
+  padding: 8px;
+  background: rgba(0,0,0,.25);
+}
+
+.eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  color: var(--dourado);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 5vw, 52px);
+  color: #fff;
+  line-height: 1;
+}
+
+.main {
+  padding: 40px 20px 80px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(218,165,32,.18);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.stat-card span {
+  display: block;
+  color: rgba(245,237,214,.6);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.stat-card strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  color: var(--dourado);
+  font-size: 34px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  color: #fff;
+  font-size: 30px;
+  margin: 36px 0 18px;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.game-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(218,165,32,.18);
+  border-radius: 14px;
+  padding: 22px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.game-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(218,165,32,.5);
+  background: rgba(255,255,255,.06);
+}
+
+.game-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.game-card p {
+  color: rgba(245,237,214,.65);
+  margin-bottom: 18px;
+}
+
+.game-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.metric {
+  background: rgba(0,0,0,.25);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.metric span {
+  display: block;
+  font-size: 12px;
+  color: rgba(245,237,214,.5);
+}
+
+.metric strong {
+  color: var(--dourado);
+  font-size: 20px;
+}
+
+.table-area {
+  display: none;
+  margin-top: 42px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(218,165,32,.15);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 22px;
+  border-bottom: 1px solid rgba(218,165,32,.12);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.table-header h2 {
+  font-family: 'Playfair Display', serif;
+  color: #fff;
+  font-size: 28px;
+}
+
+.back-btn {
+  background: var(--dourado);
+  color: var(--preto);
+  border: 0;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+}
+
+th, td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  text-align: left;
+  vertical-align: top;
+  font-size: 14px;
+}
+
+th {
+  color: var(--dourado);
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+}
+
+td {
+  color: rgba(245,237,214,.78);
+}
+
+input, select, textarea {
+  width: 100%;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  color: #fff;
+  border-radius: 6px;
+  padding: 9px;
+  font-family: 'Barlow', sans-serif;
+}
+
+select option {
+  background: #1a2a28;
+}
+
+textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.whatsapp-btn,
+.save-btn {
+  display: inline-block;
+  text-align: center;
+  border: 0;
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.whatsapp-btn {
+  background: var(--verde);
+  color: #fff;
+}
+
+.save-btn {
+  background: var(--dourado);
+  color: var(--preto);
+}
+
+.loading {
+  color: rgba(245,237,214,.6);
+  margin-top: 24px;
+}
+
+@media (max-width: 700px) {
+  .logo-area {
+    align-items: flex-start;
+  }
+
+  .table-header {
+    align-items: flex-start;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="logo-area">
+      <img src="imagens/logo_padrao.png" alt="Estação Praça">
+      <div>
+        <p class="eyebrow">Painel Gerencial</p>
+        <h1>Leads da Copa</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="container">
+
+    <div class="stats">
+      <div class="stat-card">
+        <span>Total de leads</span>
+        <strong id="totalLeads">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Respondidos</span>
+        <strong id="totalRespondidos">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Não respondidos</span>
+        <strong id="totalNaoRespondidos">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Reservas confirmadas</span>
+        <strong id="totalReservas">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>Pagos</span>
+        <strong id="totalPagos">0</strong>
+      </div>
+    </div>
+
+    <h2 class="section-title">Jogos</h2>
+
+    <div id="loading" class="loading">Carregando leads...</div>
+    <div id="gamesGrid" class="games-grid"></div>
+
+    <section id="tableArea" class="table-area">
+      <div class="table-header">
+        <h2 id="selectedGameTitle">Leads</h2>
+        <button class="back-btn" onclick="closeTable()">Voltar aos jogos</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Lead</th>
+              <th>Contato</th>
+              <th>Pessoas</th>
+              <th>Origem</th>
+              <th>Estágio</th>
+              <th>Respondido</th>
+              <th>Reserva</th>
+              <th>Pagamento</th>
+              <th>Valor</th>
+              <th>Responsável</th>
+              <th>Anotações</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby35MGU26Ni-gaP1U0aOR8Xa3jjDbg1J24_DIqYIYDtsBoxn10WAV4tBCdMmOBbSU0pAw/exec";
+
+let allLeads = [];
+let selectedGameKey = "";
+
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = "callback_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
+    window[callbackName] = function(data) {
+      resolve(data);
+      delete window[callbackName];
+      script.remove();
+    };
+
+    const script = document.createElement("script");
+    script.src = url + "&callback=" + callbackName;
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+async function loadLeads() {
+  const url = `${SCRIPT_URL}?action=list`;
+  const response = await jsonp(url);
+
+  allLeads = response.leads || [];
+
+  document.getElementById("loading").style.display = "none";
+
+  renderStats();
+  renderGames();
+}
+
+function renderStats() {
+  const total = allLeads.length;
+  const respondidos = allLeads.filter(l => l["Respondido"] === "Sim").length;
+  const reservas = allLeads.filter(l => l["Reserva Confirmada"] === "Sim").length;
+  const pagos = allLeads.filter(l => l["Pagamento"] === "Pago").length;
+
+  document.getElementById("totalLeads").innerText = total;
+  document.getElementById("totalRespondidos").innerText = respondidos;
+  document.getElementById("totalNaoRespondidos").innerText = total - respondidos;
+  document.getElementById("totalReservas").innerText = reservas;
+  document.getElementById("totalPagos").innerText = pagos;
+}
+
+function getGameKey(lead) {
+  return `${lead["Jogo"]} | ${lead["Data do Jogo"] || lead["Data do jogo"]} | ${lead["Horário do Jogo"] || lead["Horário do jogo"]}`;
+}
+
+function renderGames() {
+  const grid = document.getElementById("gamesGrid");
+  grid.innerHTML = "";
+
+  const games = {};
+
+  allLeads.forEach(lead => {
+    const key = getGameKey(lead);
+
+    if (!games[key]) {
+      games[key] = [];
+    }
+
+    games[key].push(lead);
+  });
+
+  Object.keys(games).forEach(key => {
+    const leads = games[key];
+    const first = leads[0];
+
+    const respondidos = leads.filter(l => l["Respondido"] === "Sim").length;
+    const reservas = leads.filter(l => l["Reserva Confirmada"] === "Sim").length;
+    const pagos = leads.filter(l => l["Pagamento"] === "Pago").length;
+
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.onclick = () => openGame(key);
+
+    card.innerHTML = `
+      <h3>${first["Jogo"]}</h3>
+      <p>${first["Data do Jogo"] || first["Data do jogo"]} às ${first["Horário do Jogo"] || first["Horário do jogo"]}</p>
+
+      <div class="game-metrics">
+        <div class="metric"><span>Leads</span><strong>${leads.length}</strong></div>
+        <div class="metric"><span>Respondidos</span><strong>${respondidos}</strong></div>
+        <div class="metric"><span>Reservas</span><strong>${reservas}</strong></div>
+        <div class="metric"><span>Pagos</span><strong>${pagos}</strong></div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function openGame(key) {
+  selectedGameKey = key;
+
+  const leads = allLeads.filter(lead => getGameKey(lead) === key);
+  const first = leads[0];
+
+  document.getElementById("selectedGameTitle").innerText =
+    `${first["Jogo"]} - ${first["Data do Jogo"] || first["Data do jogo"]} às ${first["Horário do Jogo"] || first["Horário do jogo"]}`;
+
+  renderTable(leads);
+
+  document.getElementById("tableArea").style.display = "block";
+  document.getElementById("tableArea").scrollIntoView({ behavior: "smooth" });
+}
+
+function closeTable() {
+  document.getElementById("tableArea").style.display = "none";
+}
+
+function renderTable(leads) {
+  const tbody = document.getElementById("leadsTable");
+  tbody.innerHTML = "";
+
+  leads.forEach(lead => {
+    const row = document.createElement("tr");
+    const rowNumber = lead.rowNumber;
+
+    row.innerHTML = `
+      <td>
+        <strong>${lead["Nome"] || ""}</strong><br>
+        <small>${lead["Email"] || ""}</small>
+      </td>
+
+      <td>${lead["Telefone"] || ""}</td>
+      <td>${lead["Pessoas"] || ""}</td>
+      <td>${lead["Origem"] || ""}</td>
+
+      <td>
+        <select id="estagio-${rowNumber}">
+          ${option("Novo Lead", lead["Estágio"])}
+          ${option("Em Atendimento", lead["Estágio"])}
+          ${option("Aguardando Retorno", lead["Estágio"])}
+          ${option("Reserva Confirmada", lead["Estágio"])}
+          ${option("Pagamento Pendente", lead["Estágio"])}
+          ${option("Pago", lead["Estágio"])}
+          ${option("Cancelado", lead["Estágio"])}
+          ${option("Perdido", lead["Estágio"])}
+        </select>
+      </td>
+
+      <td>
+        <select id="respondido-${rowNumber}">
+          ${option("Não", lead["Respondido"])}
+          ${option("Sim", lead["Respondido"])}
+        </select>
+      </td>
+
+      <td>
+        <select id="reserva-${rowNumber}">
+          ${option("Não", lead["Reserva Confirmada"])}
+          ${option("Sim", lead["Reserva Confirmada"])}
+        </select>
+      </td>
+
+      <td>
+        <select id="pagamento-${rowNumber}">
+          ${option("Pendente", lead["Pagamento"])}
+          ${option("Pago", lead["Pagamento"])}
+          ${option("Cancelado", lead["Pagamento"])}
+          ${option("Não se aplica", lead["Pagamento"])}
+        </select>
+      </td>
+
+      <td>
+        <input id="valor-${rowNumber}" value="${lead["Valor Pago"] || ""}" placeholder="R$">
+      </td>
+
+      <td>
+        <input id="responsavel-${rowNumber}" value="${lead["Responsável"] || ""}" placeholder="Nome">
+      </td>
+
+      <td>
+        <textarea id="anotacoes-${rowNumber}" placeholder="Anotações internas">${lead["Anotações Internas"] || ""}</textarea>
+      </td>
+
+      <td>
+        <div class="actions">
+          <a class="whatsapp-btn" target="_blank" href="${whatsappLink(lead["Telefone"], lead["Nome"])}">WhatsApp</a>
+          <button class="save-btn" onclick="saveLead(${rowNumber})">Salvar</button>
+        </div>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+function option(value, selected) {
+  return `<option value="${value}" ${value === selected ? "selected" : ""}>${value}</option>`;
+}
+
+function whatsappLink(phone, nome) {
+  const clean = String(phone || "").replace(/\D/g, "");
+  const numero = clean.startsWith("55") ? clean : "55" + clean;
+
+  const mensagem = encodeURIComponent(
+    `Olá, ${nome || ""}! Tudo bem? Recebemos sua solicitação de reserva para assistir ao jogo no Estação Praça.`
+  );
+
+  return `https://wa.me/${numero}?text=${mensagem}`;
+}
+
+async function saveLead(rowNumber) {
+  const params = new URLSearchParams({
+    action: "update",
+    rowNumber: rowNumber,
+    estagio: document.getElementById(`estagio-${rowNumber}`).value,
+    respondido: document.getElementById(`respondido-${rowNumber}`).value,
+    reservaConfirmada: document.getElementById(`reserva-${rowNumber}`).value,
+    pagamento: document.getElementById(`pagamento-${rowNumber}`).value,
+    valorPago: document.getElementById(`valor-${rowNumber}`).value,
+    responsavel: document.getElementById(`responsavel-${rowNumber}`).value,
+    anotacoesInternas: document.getElementById(`anotacoes-${rowNumber}`).value
+  });
+
+  const url = `${SCRIPT_URL}?${params.toString()}`;
+  await jsonp(url);
+
+  alert("Lead atualizado com sucesso.");
+
+  await loadLeads();
+
+  if (selectedGameKey) {
+    openGame(selectedGameKey);
+  }
+}
+
+loadLeads();
+</script>
+
+</body>
+</html>
