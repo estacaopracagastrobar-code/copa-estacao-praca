@@ -96,7 +96,7 @@
   }
   .hero-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(42px, 8vw, 86px); font-weight: 900; line-height: .95; color: #fff;
+    font-size: clamp(38px, 7vw, 74px); font-weight: 900; line-height: .95; color: #fff;
     animation: fadeUp .9s .2s ease both;
   }
   .hero-title span { display: block; color: var(--dourado); -webkit-text-stroke: 1px var(--dourado); }
@@ -108,14 +108,14 @@
   }
   .flags-row {
     display: flex; align-items: center; justify-content: center;
-    gap: 16px; margin-bottom: 40px;
+    gap: 18px; margin-bottom: 26px;
     animation: fadeUp .9s .4s ease both;
   }
   .flag-pill {
     display: flex; align-items: center; gap: 8px;
     background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-    border-radius: 40px; padding: 8px 18px;
-    font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700;
+    border-radius: 40px; padding: 10px 22px;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700;
     letter-spacing: 1px; color: #fff;
   }
   .flag-emoji { font-size: 22px; }
@@ -123,14 +123,35 @@
     font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700;
     color: var(--dourado); letter-spacing: 2px;
   }
-  .date-strip {
-    display: inline-flex; align-items: center; gap: 20px;
-    background: var(--dourado); color: var(--preto); padding: 10px 28px;
-    border-radius: 4px; font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
-    margin-bottom: 40px; animation: fadeUp .9s .5s ease both;
-  }
-  .date-strip span { opacity: .6; }
+.date-strip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: rgba(0,0,0,.22);
+  color: rgba(245,237,214,.88);
+
+  padding: 9px 18px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(218,165,32,.22);
+  backdrop-filter: blur(8px);
+
+  font-family: 'Barlow', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .4px;
+  text-transform: none;
+
+  margin-bottom: 24px;
+  animation: fadeUp .9s .5s ease both;
+}
+
+.date-strip span {
+  opacity: .45;
+  color: var(--dourado);
+}
   .cta-btn {
     display: inline-block; background: var(--verde); color: #fff;
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px;
@@ -555,8 +576,8 @@
   }
 
   .flag-img {
-  width: 26px;
-  height: 18px;
+  width: 30px;
+  height: 20px;
   object-fit: cover;
   border-radius: 3px;
   box-shadow: 0 0 8px rgba(0,0,0,.25);
@@ -761,6 +782,82 @@
   text-decoration: underline;
 }
 
+.ticket-offer {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+
+  margin: -12px 0 24px;
+  padding: 12px 18px;
+
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(218,165,32,.18);
+  border-radius: 12px;
+
+  backdrop-filter: blur(8px);
+
+  max-width: 520px;
+
+  animation: fadeUp .9s .55s ease both;
+}
+
+.ticket-price {
+  min-width: 112px;
+
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1;
+
+  color: var(--dourado);
+  text-align: left;
+}
+
+.ticket-info {
+  text-align: left;
+}
+
+.ticket-info strong {
+  display: block;
+
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+
+  color: #fff;
+
+  margin-bottom: 2px;
+}
+
+.ticket-info p {
+  color: rgba(245,237,214,.70);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+@media (max-width: 620px) {
+  .ticket-offer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    padding: 14px 16px;
+    margin: -4px 0 24px;
+  }
+
+  .ticket-price {
+    min-width: auto;
+    font-size: 34px;
+    text-align: center;
+  }
+
+  .ticket-info {
+    text-align: center;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -789,8 +886,24 @@
     </div>
 
     <div class="date-strip">
-      🗓️ 13 DE JUNHO &nbsp;<span>|</span>&nbsp; 19H &nbsp;<span>|</span>&nbsp; ESTAÇÃO PRAÇA GASTROBAR
-    </div>
+  <strong>13 de junho</strong>
+  <span>|</span>
+  <strong>19h</strong>
+  <span>|</span>
+  <strong>Estação Praça Gastrobar</strong>
+</div>
+
+    <div class="ticket-offer">
+  <span class="ticket-price">R$99,90</span>
+
+  <div class="ticket-info">
+    <strong>Ingresso com rodízio incluso</strong>
+    <p>
+      Direito ao rodízio de boteco, participação nos sorteios
+      e valores especiais nos drinks.
+    </p>
+  </div>
+</div>
 
     <a href="#reserva" class="cta-btn">Garantir Minha Reserva</a>
   </div>
