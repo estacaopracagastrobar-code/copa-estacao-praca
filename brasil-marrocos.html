@@ -616,6 +616,9 @@ async function handleSubmit() {
     body: JSON.stringify(dados)
   });
 
+  // Evento de conversão
+  fbq('track', 'Lead');
+
   document.getElementById('form-container').style.display = 'none';
   document.getElementById('success-msg').style.display = 'block';
   document.getElementById('success-msg').scrollIntoView({
@@ -691,6 +694,8 @@ Aguardo o atendimento.
     `.trim();
 
     const whatsappUrl = `https://wa.me/${COMPANY_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+    fbq('track', 'Lead');
 
     window.open(whatsappUrl, "_blank");
 
