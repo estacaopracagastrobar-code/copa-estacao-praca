@@ -607,16 +607,27 @@ async function handleSubmit() {
     aceitePolitica: aceitePolitica ? "Sim" : "Não"
   };
 
-  fetch('https://script.google.com/macros/s/AKfycby35MGU26Ni-gaP1U0aOR8Xa3jjDbg1J24_DIqYIYDtsBoxn10WAV4tBCdMmOBbSU0pAw/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(dados)
-  });
+ fetch('https://script.google.com/macros/s/AKfycby35MGU26Ni-gaP1U0aOR8Xa3jjDbg1J24_DIqYIYDtsBoxn10WAV4tBCdMmOBbSU0pAw/exec', {
+  method: 'POST',
+  mode: 'no-cors',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(dados)
+});
+  const valorReserva = Number(pessoas) * 99.90;
 
-  document.getElementById('form-container').style.display = 'none';
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'Lead', {
+      content_name: jogo,
+      content_category: 'Copa 2026',
+      value: valorReserva,
+      currency: 'BRL',
+      num_items: Number(pessoas)
+    });
+  }
+
+document.getElementById('form-container').style.display = 'none';
   document.getElementById('success-msg').style.display = 'block';
   document.getElementById('success-msg').scrollIntoView({
     behavior: 'smooth',
@@ -691,6 +702,18 @@ Aguardo o atendimento.
     `.trim();
 
     const whatsappUrl = `https://wa.me/${COMPANY_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+    const valorReserva = Number(pessoas) * 99.90;
+
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', {
+        content_name: leadData.jogo,
+        content_category: 'Copa 2026',
+        value: valorReserva,
+        currency: 'BRL',
+        num_items: Number(pessoas)
+      });
+    }
 
     window.open(whatsappUrl, "_blank");
 
