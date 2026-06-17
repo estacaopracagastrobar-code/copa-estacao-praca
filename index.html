@@ -689,6 +689,23 @@ footer .hashtag {
 }
 
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2946364449033203');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2946364449033203&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 
 <body>
@@ -821,7 +838,13 @@ footer .hashtag {
           21h30
         </p>
 
-        <a href="brasil-haiti.html" class="cta-btn">Reservar este jogo</a>
+        <a 
+        href="brasil-haiti.html?jogo=brasil-haiti" 
+        class="cta-btn"
+        onclick="trackGameClick('Brasil x Haiti', 'brasil-haiti')"
+      >
+        Reservar este jogo
+      </a>
       </article>
 
       <article class="game-card">
@@ -840,7 +863,13 @@ footer .hashtag {
           19 horas
         </p>
 
-        <a href="brasil-escocia.html" class="cta-btn">Reservar este jogo</a>
+        <a 
+        href="brasil-escocia.html?jogo=brasil-escocia" 
+        class="cta-btn"
+        onclick="trackGameClick('Brasil x Escócia', 'brasil-escocia')"
+      >
+        Reservar este jogo
+      </a>
       </article>
 
       <article class="game-card">
@@ -859,7 +888,13 @@ footer .hashtag {
           Aguardando classificação
         </p>
 
-        <a href="oitavas.html" class="cta-btn">Entrar na lista</a>
+        <a 
+        href="oitavas.html?jogo=oitavas" 
+        class="cta-btn"
+        onclick="trackGameClick('Oitavas', 'oitavas')"
+      >
+        Entrar na lista
+      </a>
       </article>
 
       <article class="game-card">
@@ -878,7 +913,13 @@ footer .hashtag {
           Aguardando classificação
         </p>
 
-        <a href="quartas.html" class="cta-btn">Entrar na lista</a>
+        <a 
+        href="quartas.html?jogo=quartas" 
+        class="cta-btn"
+        onclick="trackGameClick('Quartas', 'quartas')"
+      >
+        Entrar na lista
+      </a>
       </article>
 
       <article class="game-card">
@@ -897,7 +938,13 @@ footer .hashtag {
           Aguardando classificação
         </p>
 
-        <a href="semi.html" class="cta-btn">Entrar na lista</a>
+        <a 
+        href="semi.html?jogo=semifinal" 
+        class="cta-btn"
+        onclick="trackGameClick('Semifinal', 'semifinal')"
+      >
+        Entrar na lista
+      </a>
       </article>
 
       <article class="game-card">
@@ -916,7 +963,13 @@ footer .hashtag {
           Aguardando campanha da seleção
         </p>
 
-        <a href="final.html" class="cta-btn">Entrar na lista</a>
+        <a 
+        href="final.html?jogo=final" 
+        class="cta-btn"
+        onclick="trackGameClick('Final', 'final')"
+      >
+        Entrar na lista
+      </a>
       </article>
 
     </div>
@@ -1005,6 +1058,16 @@ footer .hashtag {
   <p><strong>Estação Praça Gastrobar</strong></p>
   <p>Av. Kennedy, 260 — Jardim Três Marias — São Bernardo do Campo, SP</p>
 </footer>
-
+<script>
+function trackGameClick(nomeJogo, slugJogo) {
+  if (typeof fbq !== 'undefined') {
+    fbq('trackCustom', 'CliqueJogoCopa', {
+      content_name: nomeJogo,
+      content_category: 'Copa 2026',
+      jogo_slug: slugJogo
+    });
+  }
+}
+</script>
 </body>
 </html>
