@@ -259,7 +259,7 @@
       rgba(16, 74, 63, 0.82),
       rgba(10, 32, 28, 0.88)
     ),
-    url("imagens/bar-copa.jpg");
+    url("../imagens/bar-copa.jpg");
 
   background-size: cover;
   background-position: center;
